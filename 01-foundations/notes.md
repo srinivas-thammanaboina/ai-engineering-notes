@@ -188,3 +188,102 @@ All three outputs get combined into one enriched vector for `it` that carries al
 Keys decide *how much* to attend to a token. Values decide *what information* you get from it. They're separate so a token can be easy to match against (strong key signal) while carrying different information in its value.
 
 ---
+
+### Q: What is temperature — is it the distance between vectors? And how is it calculated?
+
+**No — temperature has nothing to do with vector distance.** These are two separate concepts that operate at completely different stages.
+
+- **Vector distance** — measures *meaning similarity* between words in embedding space. Happens inside the transformer layers while building up context.
+- **Temperature** — controls *how decisive the model is* when picking the next token from its probability list. Happens at the very end, during sampling.
+
+Where each fits in the pipeline:
+
+```
+Step 1 — vectors & attention    →  model builds up meaning and context
+Step 2 — probability scores     →  model scores every possible next token (logits)
+Step 3 — temperature applied    →  reshapes those scores before sampling
+Step 4 — pick one token         →  that's the output
+```
+
+Temperature only shows up at step 3. Everything about vectors is done by step 1.
+
+---
+
+**How temperature is actually calculated:**
+
+The model produces raw scores called **logits** for every token in the vocabulary. Temperature is applied by dividing all logits by T before running softmax:
+
+```
+P(token) = exp(logit / T) / sum of exp(all logits / T)
+```
+
+**Softmax** is the function that converts raw scores into probabilities (all values between 0–1, all adding up to 1). Temperature just slips in as a divisor before softmax runs.
+
+**Concrete example with real numbers:**
+
+Raw logits the model produced:
+```
+Paris:  4.0
+London: 2.0
+city:   1.0
+```
+
+**T = 1.0 — default, no change:**
+```
+exp(4)=54.6   exp(2)=7.4   exp(1)=2.7   total=64.7
+
+Paris  = 54.6 / 64.7 = 0.84
+London =  7.4 / 64.7 = 0.11
+city   =  2.7 / 64.7 = 0.04
+```
+
+**T = 0.5 — low temperature (divide logits by 0.5 → they double):**
+```
+logits become: 8.0, 4.0, 2.0
+
+exp(8)=2981   exp(4)=54.6   exp(2)=7.4   total=3043
+
+Paris  = 2981 / 3043 = 0.98   ← almost certain
+London =   55 / 3043 = 0.02
+city   =    7 / 3043 = 0.00
+```
+
+**T = 2.0 — high temperature (divide logits by 2 → they shrink):**
+```
+logits become: 2.0, 1.0, 0.5
+
+exp(2)=7.4   exp(1)=2.7   exp(0.5)=1.65   total=11.75
+
+Paris  = 7.4  / 11.75 = 0.63
+London = 2.7  / 11.75 = 0.23   ← gets a real chance
+city   = 1.65 / 11.75 = 0.14   ← also gets a real chance
+```
+
+**Why dividing by T has this effect:**
+
+- **T < 1** → dividing by a small number makes logits *bigger* → gaps between scores get amplified → winner pulls further ahead → distribution gets more peaked
+- **T > 1** → dividing by a large number *compresses* logits → gaps between scores shrink → distribution flattens out
+- **T = 1** → logits unchanged → standard softmax
+
+```
+T = 0.5  →  [0.98, 0.02, 0.00]   ← sharp, decisive
+T = 1.0  →  [0.84, 0.11, 0.04]   ← normal
+T = 2.0  →  [0.63, 0.23, 0.14]   ← flat, creative
+```
+
+Temperature controls how much the model *cares about the differences* between its scores. Low T amplifies differences — the best guess dominates. High T smooths them away — underdogs get a real chance.
+
+**Practical guide:**
+
+| Use case | Temperature |
+|---|---|
+| Data extraction, structured output | 0–0.2 |
+| Factual Q&A, code generation | 0.2–0.5 |
+| Conversational assistant | 0.7 |
+| Creative writing, brainstorming | 0.9–1.2 |
+| Experimental / maximum variety | 1.5+ |
+
+**One-line summary:**
+> Temperature divides the model's raw scores before softmax — low values amplify score differences (decisive), high values compress them (creative). It has nothing to do with vector distance.
+
+---
