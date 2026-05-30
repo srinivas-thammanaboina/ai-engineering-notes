@@ -4,7 +4,7 @@ This repository holds my personal learning notes as I work through an AI Enginee
 
 ## What this repo is
 
-A structured set of notes, summaries, and small projects tracking my journey to becoming an AI Engineer. It is organized into six numbered modules plus a shared resources folder.
+A structured set of notes, summaries, and small projects tracking my journey learning AI engineering in depth. It is organized into six numbered modules plus a shared resources folder.
 
 ## Folder structure
 
@@ -14,7 +14,7 @@ A structured set of notes, summaries, and small projects tracking my journey to 
 - `03-agents/` — Agentic systems: architecture, MCP & A2A, LangChain & LangGraph
 - `04-finetuning/` — Finetuning fundamentals, LoRA/QLoRA, local models with Ollama
 - `05-production/` — Evals, security, observability, production readiness
-- `06-career/` — AI job market, portfolio building, becoming AI-native
+- `06-ai-native/` — using AI tools fluently in daily practice; writing up what I learn to cement understanding
 
 ## How to help me
 
@@ -33,4 +33,4 @@ A structured set of notes, summaries, and small projects tracking my journey to 
 
 ## What I'm optimizing for
 
-Genuine understanding I can apply and explain in an interview — not just completed checkboxes. Push me toward building and writing things up, not just reading.
+Deep, working understanding of how these systems function — the kind that comes from building them and being able to reason from first principles about why each piece is there. Optimize for depth of concept and hands-on practice, not coverage or completed checkboxes. Push me toward building, breaking, and writing things up, not just reading.

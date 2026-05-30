@@ -1,6 +1,6 @@
 # AI Engineering Notes
 
-My personal learning notes and projects as I work through a structured AI Engineer curriculum. The goal is interview-ready understanding — not just completed checkboxes.
+My personal learning notes and projects as I work through a structured AI engineering curriculum. The goal is deep, practical understanding — built hands-on and reasoned from first principles, not just completed checkboxes.
 
 **Pace:** ~10 hours/week · **Timeline:** ~13 weeks for core modules (1–5) · Module 6 runs in parallel throughout.
 
@@ -14,7 +14,7 @@ My personal learning notes and projects as I work through a structured AI Engine
 | `03-agents/` | Agentic systems: architecture, MCP & A2A, LangChain & LangGraph | ~3 weeks |
 | `04-finetuning/` | Finetuning, LoRA/QLoRA, local models with Ollama | ~2.5 weeks |
 | `05-production/` | Evals, security, observability, production readiness | ~2.5 weeks |
-| `06-career/` | AI job market, portfolio building, becoming AI-native | ongoing |
+| `06-ai-native/` | Using AI tools fluently in daily practice; writing to cement understanding | ongoing |
 
 ## What's in Each Module
 

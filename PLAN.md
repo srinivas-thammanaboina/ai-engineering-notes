@@ -1,6 +1,6 @@
 # AI Engineer Curriculum — Learning Plan
 
-My structured path to becoming an AI Engineer. Steady pace of ~10 hours/week.
+My structured path to learning AI engineering in depth through hands-on building. Steady pace of ~10 hours/week.
 Core modules (1–5) take roughly **13 weeks (~3 months)**; Module 6 runs in parallel throughout.
 
 **Weekly split:** ~6 hrs hands-on building · ~2 hrs paper/concept reading · ~2 hrs writing up notes.
@@ -76,16 +76,16 @@ You can only evaluate and harden what you've already built.
 
 ---
 
-## Module 6 — AI Career Launchpad & Becoming AI-Native
-*Ongoing · runs in parallel from Module 2 onward · folder: `06-career/`*
+## Module 6 — Becoming AI-Native
+*Ongoing · runs in parallel from Module 2 onward · folder: `06-ai-native/`*
 
-Don't save this for the end.
+Don't save this for the end — fluency with AI tooling compounds across every other module.
 
-- [ ] Track the 2026 AI job market
-- [ ] Build a visible portfolio: GitHub + LinkedIn + writing
-- [ ] Adopt AI-native productivity tools in daily workflow
+- [ ] Adopt AI-native productivity tools (agentic coding, LLMs as a daily work multiplier) into the actual workflow
+- [ ] Build the habit of writing up what I learn — turning each build into an explanation I can reason from
+- [ ] Reflect on how working *with* AI changes how I design and debug
 
-**Project (meta):** Each module's project becomes a portfolio piece with a short published writeup.
+**Project (meta):** Each module's project is a real hands-on build, paired with a writeup that explains *why* it works — written to cement my own understanding, not as a deliverable.
 
 ---
 
