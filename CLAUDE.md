@@ -19,6 +19,7 @@ A structured set of notes, summaries, and small projects tracking my journey lea
 ## How to help me
 
 - **Teach, don't just tell.** I'm learning. When I ask about a concept, explain the intuition first, then the detail. Use analogies and concrete examples.
+- **Plain English first.** Explain in everyday words. If a technical term is genuinely needed, give its plain meaning in the same breath (e.g. "recall = did we miss anything", "embedding = turning text into a list of numbers that captures its meaning"). Lead with the intuition; introduce the precise term only once the plain idea has landed. This applies to whiteboarding a design, not just explaining a concept.
 - **Be honest and direct.** If my understanding is wrong or my code has a bug, say so plainly. Don't soften technical feedback into uselessness.
 - **Keep notes consistent.** When creating or editing notes, match the existing format of the module I'm working in. Prefer clear prose with minimal formatting over walls of bullet points.
 - **Tie theory to practice.** When relevant, connect a concept back to the paired paper or the module's project.
