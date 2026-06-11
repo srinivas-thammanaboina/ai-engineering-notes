@@ -287,3 +287,100 @@ Temperature controls how much the model *cares about the differences* between it
 > Temperature divides the model's raw scores before softmax — low values amplify score differences (decisive), high values compress them (creative). It has nothing to do with vector distance.
 
 ---
+
+### Q: What is softmax and where is it used?
+
+Softmax takes a list of raw numbers (some big, some small, even negative) and squashes them into a list of probabilities that are all positive and add up to 1 — while keeping the *order* (the biggest stays biggest).
+
+**The intuition first:**
+
+Imagine a model looks at a photo and produces three raw "confidence scores":
+
+```
+cat:  2.0
+dog:  1.0
+bird: 0.1
+```
+
+These are just *scores* — they could be any number. They don't add to 1, so they're not yet probabilities. We can't say "70% cat" from them directly.
+
+Softmax converts them into something you *can* read as percentages:
+
+```
+cat:  65.9%
+dog:  24.2%
+bird:  9.9%   → adds up to 100%
+```
+
+Think of it as a "vote-share calculator": each candidate has a raw popularity score, and softmax tells you what fraction of the total vote each one actually gets.
+
+**Why not just divide each score by the sum?**
+
+That's the obvious idea — but the problem is raw scores can be **negative**, and a simple divide breaks with negatives (you could get negative "probabilities").
+
+Softmax fixes this by first running every score through `e^x` (exponentiation), which is **always positive**, and *then* dividing by the total. The formula:
+
+```
+softmax(x_i) = exp(x_i) / sum of exp(all x_j)
+```
+
+In plain words: *"raise e to the power of each score, then give each one its share of the total."*
+
+The `e^x` step has a useful side effect: it **exaggerates differences**. A score that's a bit higher than the rest gets a *much* bigger probability. That's why it's called "soft**max**" — it leans toward the maximum, like a gentle version of just picking the single winner.
+
+**Worked example (the actual arithmetic):**
+
+Scores: `[2.0, 1.0, 0.1]`
+
+Step 1 — exponentiate each:
+```
+e^2.0  = 7.389
+e^1.0  = 2.718
+e^0.1  = 1.105
+```
+
+Step 2 — add them up:
+```
+total = 7.389 + 2.718 + 1.105 = 11.212
+```
+
+Step 3 — each divided by the total:
+```
+cat:  7.389 / 11.212 = 0.659  (65.9%)
+dog:  2.718 / 11.212 = 0.242  (24.2%)
+bird: 1.105 / 11.212 = 0.099  ( 9.9%)
+```
+
+Done — positive, ordered, sums to 1.
+
+```python
+import numpy as np
+
+def softmax(x):
+    e = np.exp(x - np.max(x))   # subtract max for numerical stability
+    return e / e.sum()
+
+softmax(np.array([2.0, 1.0, 0.1]))
+# array([0.659, 0.242, 0.099])
+```
+
+That `- np.max(x)` trick doesn't change the result — it just stops `e^x` from overflowing on big numbers. Worth knowing because real code always does it.
+
+**Where it's used (and why it matters for AI engineering):**
+
+1. **The last layer of a classifier.** Any model that picks one label out of many (image classes, sentiment, spam/not-spam) ends with softmax to turn scores into a probability per class.
+
+2. **Inside every LLM — the most relevant one here.** When an LLM predicts the next token, it produces one raw score (a "logit") for *every* word in its vocabulary (~50,000+ of them). Softmax converts those logits into a probability distribution over the whole vocabulary, and the model samples its next word from that distribution.
+
+   This is exactly where **temperature** lives (see the temperature note above). Before softmax, the logits are divided by a temperature `T`:
+   - **Low T (e.g. 0.2)** → differences get exaggerated → distribution gets "spiky" → model almost always picks the top word → predictable, repetitive.
+   - **High T (e.g. 1.5)** → differences flatten out → more words get a real chance → creative, riskier output.
+
+   So when you tune `temperature` in an API call, you're literally reshaping the softmax distribution.
+
+3. **Attention (the heart of transformers).** Inside attention, each token computes scores for how much it should "pay attention" to every other token. Softmax turns those into weights that sum to 1, so attention becomes a weighted average — "spend 100% of your attention, distributed across these tokens."
+
+**One-line summary:**
+> Softmax is the bridge from "raw scores the model computed" to "a probability distribution you can sample from or read as percentages." Every time an LLM picks a word, attention focuses, or a classifier decides — softmax is doing that conversion.
+
+---
